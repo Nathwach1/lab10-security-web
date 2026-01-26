@@ -9,6 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @Controller
 public class AuthController {
@@ -30,7 +33,8 @@ public class AuthController {
     @PostMapping("/register")
     public String register(
             @Valid @ModelAttribute("registerRequest") RegisterRequest request,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            HttpServletRequest httpRequest
     ) {
         if (bindingResult.hasErrors()) {
             return "register";
@@ -38,21 +42,23 @@ public class AuthController {
 
         try {
             registerService.register(request);
+
+            // 🔐 AUTO-LOGIN après register
+            httpRequest.login(request.getEmail(), request.getPassword());
+
         } catch (IllegalStateException e) {
             bindingResult.rejectValue("email", "error.email", e.getMessage());
             return "register";
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
         }
 
-        return "redirect:/welcome";
+        return "redirect:/notes";
     }
+
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "welcome";
     }
 
 }

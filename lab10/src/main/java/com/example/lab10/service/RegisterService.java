@@ -12,26 +12,30 @@ public class RegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder
-    ) {
+    public RegisterService(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(RegisterRequest request) {
+    public void register(String username, String email, String password) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(email)) {
             throw new IllegalStateException("Email already registered");
         }
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        String role;
+        if (email.endsWith("@work.com")) {
+            role = "ROLE_ADMIN";
+        } else {
+            role = "ROLE_USER";
+        }
 
-        // 🔐 Hash password
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
 
         userRepository.save(user);
     }

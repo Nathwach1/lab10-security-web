@@ -1,0 +1,157 @@
+/* ===== RESET ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    color: #2c3e50;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 420px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.container.wide {
+    max-width: 900px;
+}
+
+/* ===== TITLES ===== */
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* ===== FORM ===== */
+form {
+    margin-top: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+button {
+    width: 100%;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+/* ===== LINKS ===== */
+a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* ===== MESSAGES ===== */
+.success {
+    background: #e6fffa;
+    border-left: 5px solid #38b2ac;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+.error {
+    background: #fff5f5;
+    border-left: 5px solid #e53e3e;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+/* ===== NOTES ===== */
+.note {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.note:last-child {
+    border-bottom: none;
+}
+
+/* ===== HEADER ===== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logout-btn {
+    background: #e53e3e;
+    width: auto;
+    padding: 8px 14px;
+}
+
+.logout-btn:hover {
+    background: #c53030;
+}
+
+/* ===== ADMIN ===== */
+.user-card {
+    background: #f7fafc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.user-card h2 {
+    margin-bottom: 5px;
+}
+
+.user-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.notes li {
+    margin-bottom: 10px;
+}
+
+.empty {
+    color: #999;
+    font-style: italic;
+}

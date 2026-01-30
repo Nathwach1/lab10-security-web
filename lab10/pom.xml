@@ -67,6 +67,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
@@ -78,6 +79,7 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.47.1.0</version>
 		</dependency>
+
 
 		<!-- Hibernate dialect for SQLite -->
 		<dependency>

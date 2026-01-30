@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>My Notes</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<h1>My Notes</h1>
+<div class="container">
 
-<form th:action="@{/notes}" method="post">
-    <input type="hidden"
-           th:name="${_csrf.parameterName}"
-           th:value="${_csrf.token}" />
+    <div class="header">
+        <h1>📝 My Notes</h1>
 
-    <input type="text" name="title" placeholder="Title" required />
-    <br/>
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}" />
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
+    </div>
 
-    <textarea name="content" placeholder="Content"></textarea>
-    <br/>
+    <form th:action="@{/notes}" method="post">
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
 
-    <button type="submit">Add note</button>
-</form>
+        <input type="text" name="title" placeholder="Title" required />
+        <textarea name="content" placeholder="Write your note..."></textarea>
 
-<hr/>
+        <button type="submit">Add note</button>
+    </form>
 
-<ul>
-    <li th:each="note : ${notes}">
-        <strong th:text="${note.title}"></strong><br/>
-        <span th:text="${note.content}"></span>
-    </li>
-</ul>
+    <hr/>
 
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Logout</button>
-</form>
+    <div th:if="${#lists.isEmpty(notes)}" class="empty">
+        No notes yet
+    </div>
+
+    <ul th:if="${!#lists.isEmpty(notes)}">
+        <li class="note" th:each="note : ${notes}">
+            <strong th:text="${note.title}"></strong>
+            <span th:text="${note.content}"></span>
+        </li>
+    </ul>
+
+</div>
 
 </body>
 </html>

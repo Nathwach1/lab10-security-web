@@ -1,16 +1,15 @@
 package com.example.lab10.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import com.example.lab10.dto.RegisterRequest;
 import com.example.lab10.service.RegisterService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -22,43 +21,44 @@ public class AuthController {
         this.registerService = registerService;
     }
 
-    // 1️⃣ SHOW REGISTER PAGE
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String registerPage(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
 
-    // 2️⃣ HANDLE REGISTER SUBMISSION
+
     @PostMapping("/register")
     public String register(
-            @Valid @ModelAttribute("registerRequest") RegisterRequest request,
+            @Valid @ModelAttribute RegisterRequest request,
             BindingResult bindingResult,
-            HttpServletRequest httpRequest
+            RedirectAttributes redirectAttributes
     ) {
+
+        // 🔴 SI ERREURS → ON RESTE SUR REGISTER
         if (bindingResult.hasErrors()) {
             return "register";
         }
 
-        try {
-            registerService.register(request);
+        registerService.register(
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword()
+        );
 
-            // 🔐 AUTO-LOGIN après register
-            httpRequest.login(request.getEmail(), request.getPassword());
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "User successfully created. You can now log in."
+        );
 
-        } catch (IllegalStateException e) {
-            bindingResult.rejectValue("email", "error.email", e.getMessage());
-            return "register";
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
-
-        return "redirect:/notes";
+        return "redirect:/login";
     }
+
+
 
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-
 }
+

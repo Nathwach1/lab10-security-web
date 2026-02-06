@@ -22,8 +22,6 @@ jobs:
 
       - name: Make mvnw executable
         run: chmod +x mvnw
-        working-directory: lab10/lab10
 
       - name: Run tests
         run: ./mvnw test
-        working-directory: lab10/lab10

@@ -35,7 +35,6 @@ public class AuthController {
             RedirectAttributes redirectAttributes
     ) {
 
-        // 🔴 SI ERREURS → ON RESTE SUR REGISTER
         if (bindingResult.hasErrors()) {
             return "register";
         }
@@ -52,6 +51,11 @@ public class AuthController {
         );
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
     }
 
 

@@ -6,10 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(CustomUserDetailsService.class);
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -18,18 +22,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        System.out.println("=== LOGIN ATTEMPT ===");
-        System.out.println("EMAIL TYPED: " + email);
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    System.out.println("USER NOT FOUND");
-                    return new UsernameNotFoundException("User not found");
+                    log.warn("LOGIN_ATTEMPT result=FAILURE email={}", maskEmail(email));
+                    return new UsernameNotFoundException("Invalid credentials");
                 });
 
-        System.out.println("USER FOUND: " + user.getEmail());
-        System.out.println("ROLE: " + user.getRole());
-        System.out.println("PASSWORD HASH: " + user.getPassword());
+        log.info(
+                "LOGIN_ATTEMPT result=SUCCESS email={} role={}",
+                maskEmail(user.getEmail()),
+                user.getRole()
+        );
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
@@ -38,4 +42,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
+    private String maskEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return "***";
+        }
+        String[] parts = email.split("@", 2);
+        return parts[0].charAt(0) + "***@" + parts[1];
+    }
 }

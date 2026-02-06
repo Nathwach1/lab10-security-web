@@ -22,25 +22,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // 🔐 AUTHORIZATION
+
                 .authorizeHttpRequests(auth -> auth
-
-                        // 🌍 PUBLIC
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-
-                        // 🚫 SEULEMENT SI NON CONNECTÉ
                         .requestMatchers("/login", "/register").anonymous()
-
-                        // 👑 ADMIN
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // 👤 USER (ADMIN INTERDIT)
                         .requestMatchers("/notes/**").hasRole("USER")
-
                         .anyRequest().authenticated()
                 )
 
-                // 🔑 LOGIN
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")
@@ -49,7 +39,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-                // 🚪 LOGOUT SÉCURISÉ
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
@@ -58,12 +47,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-                // 🛡️ SECURITY HEADERS (LAB 13)
                 .headers(headers -> headers
                         .contentTypeOptions(Customizer.withDefaults())
                         .frameOptions(frame -> frame.deny())
-                        .referrerPolicy(ref -> ref
-                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
+                        .referrerPolicy(ref ->
+                                ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives(
                                         "default-src 'self'; " +
@@ -73,8 +61,11 @@ public class SecurityConfig {
                                 )
                         )
                 )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/403")
+                )
 
-                // 🛡️ CSRF (ON GARDE ACTIVÉ)
+
                 .csrf(Customizer.withDefaults());
 
         return http.build();

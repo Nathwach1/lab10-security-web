@@ -18,7 +18,6 @@ public class Note {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // ✅ GETTERS / SETTERS OBLIGATOIRES
 
     public Integer getId() {
         return id;
@@ -44,7 +43,7 @@ public class Note {
         return user;
     }
 
-    // 👉 CETTE MÉTHODE MANQUE CHEZ TOI
+
     public void setUser(User user) {
         this.user = user;
     }
